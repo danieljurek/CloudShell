@@ -38,6 +38,9 @@ RUN bash ./tdnfinstall.sh postgresql-devel
 RUN bash ./tdnfinstall.sh terraform
 RUN bash ./tdnfinstall.sh gh
 
+# Install azure-developer-cli (azd)
+RUN curl -fsSL https://aka.ms/install-azd.sh | bash
+
 RUN mkdir -p /usr/cloudshell
 WORKDIR /usr/cloudshell
 
