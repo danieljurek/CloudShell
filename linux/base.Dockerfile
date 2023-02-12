@@ -137,6 +137,9 @@ RUN bash ./tdnfinstall.sh \
   gh \
   redis
 
+#Workaround to add JDK 17 support
+RUN bash ./tdnfinstall.sh msopenjdk-17 && sudo rpm -e msopenjdk-11 --nodeps
+
 # Install azure-functions-core-tools
 RUN wget -nv -O Azure.Functions.Cli.linux-x64.4.0.3971.zip https://github.com/Azure/azure-functions-core-tools/releases/download/4.0.3971/Azure.Functions.Cli.linux-x64.4.0.3971.zip \
   && unzip -d azure-functions-cli Azure.Functions.Cli.linux-x64.4.0.3971.zip \
