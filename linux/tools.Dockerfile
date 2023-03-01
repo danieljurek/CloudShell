@@ -38,7 +38,11 @@ RUN bash ./tdnfinstall.sh postgresql-devel
 RUN bash ./tdnfinstall.sh terraform
 RUN bash ./tdnfinstall.sh gh
 
+# Workaround to add JDK 17 support
+RUN bash ./tdnfinstall.sh msopenjdk-17 && sudo rpm -e msopenjdk-11 --nodeps
+
 # Install azure-developer-cli (azd)
+ENV AZD_IN_CLOUDSHELL=1
 RUN curl -fsSL https://aka.ms/install-azd.sh | bash
 
 RUN mkdir -p /usr/cloudshell
@@ -84,17 +88,8 @@ ENV PATH ~/.local/bin:~/bin:~/.dotnet/tools:$PATH
 # Set AZUREPS_HOST_ENVIRONMENT 
 ENV AZUREPS_HOST_ENVIRONMENT cloud-shell/1.0
 
-ARG USERNAME=cloudshell-test
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
+# Temporary workaround to use a non-root user
 # Create the user
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
-
-# ********************************************************
-# * Anything else you want to do like clean up goes here *
-# ********************************************************
-
+RUN adduser -m --uid 9527 csuser
 # [Optional] Set the default user. Omit if you want to keep the default as root.
-USER $USERNAME
+USER csuser
